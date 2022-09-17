@@ -1,11 +1,10 @@
 import hashlib
 import uuid
 
-from split_types.message_types import CreateUserMessageData
-from split_types.user import User
+from split_types.user import CreateUserAndGetTokenMessageData, User
 
 
-def create_user_and_get_token(message_data: CreateUserMessageData) -> None:
+def create_user_and_get_token(message_data: CreateUserAndGetTokenMessageData) -> None:
     email = message_data['email']
     password = message_data['password']
     name = message_data['name']
