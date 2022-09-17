@@ -1,4 +1,4 @@
-from typing import Literal, Tuple, TypedDict, Union
+from typing import List, Literal, Tuple, TypedDict, Union
 
 
 class CreateUserMessageData(TypedDict):
@@ -15,6 +15,21 @@ class StoreUserMessageData(TypedDict):
     password: str
 
 StoreUserMessage = Tuple[Literal['store_user'], StoreUserMessageData]
+
+
+class StoreTransactionMessageDataComponent(TypedDict):
+    payer_id: str
+    payee_id: str
+    amount: str
+
+
+class StoreTransactionMessageData(TypedDict):
+    id: str
+    date: str
+    description: str
+    components: List[StoreTransactionMessageDataComponent]
+
+StoreTransactionMessage = Tuple[Literal['store_transaction'], StoreTransactionMessageData]
 
 class GetTokenMessageData(TypedDict):
     email: str

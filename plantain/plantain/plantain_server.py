@@ -21,6 +21,13 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
                 users.store_user(store_user_request)
             ))
 
+        if message[0] == "store_transaction":
+            store_transaction_request = message[1]
+            return json.dumps((
+                "store_user_response",
+                users.store_user(store_user_request)
+            ))
+
     except Exception as e:
         print(e)
 
