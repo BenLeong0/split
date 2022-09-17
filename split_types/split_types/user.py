@@ -15,6 +15,7 @@ StoreUserMessage = Tuple[Literal['store_user'], User]
 class CreateUserMessageData(TypedDict):
     email: str
     password: str
+    name: str
 
 
 CreateUserMessage = Tuple[Literal['create_user'], CreateUserMessageData]
