@@ -14,4 +14,4 @@ python -m twine upload dist/*
 ```
 
 When prompted to log in, set the username as `__token__`, and the password as the
-token generated on the PyPi website.
+token generated on the PyPi website (see (here)[https://pypi.org/help/#apitoken]).
