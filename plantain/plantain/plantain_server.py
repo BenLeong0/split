@@ -4,7 +4,10 @@ from typing import Optional
 
 import pika
 
-import modules.users as users
+from modules import (
+    users,
+    transactions,
+)
 
 from split_types.message_types import Message
 
@@ -25,7 +28,7 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
             store_transaction_request = message[1]
             return json.dumps((
                 "store_user_response",
-                users.store_user(store_user_request)
+                transactions.store_transaction(store_transaction_request)
             ))
 
     except Exception as e:
