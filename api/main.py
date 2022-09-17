@@ -11,7 +11,7 @@ def ping():
 # USERS
 
 # TODO
-@app.route("/api/create_user", methods=["OPTIONS", "POST"])
+@app.route("/api/create_user", methods=["POST"])
 def create_user():
     if request.method == "OPTIONS":
         return Response(201)
