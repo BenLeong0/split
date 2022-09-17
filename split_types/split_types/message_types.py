@@ -24,7 +24,6 @@ class StoreTransactionMessageDataComponent(TypedDict):
 
 
 class StoreTransactionMessageData(TypedDict):
-    id: str
     date: str
     description: str
     components: List[StoreTransactionMessageDataComponent]
