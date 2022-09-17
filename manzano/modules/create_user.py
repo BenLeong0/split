@@ -2,19 +2,24 @@ import hashlib
 import uuid
 
 from split_types.message_types import CreateUserMessageData
+from split_types.user import User
 
 
 def create_user(message_data: CreateUserMessageData) -> None:
     email = message_data['email']
     password = message_data['password']
+    name = message_data['name']
 
     salt = hash_string(email)
     hashed_password = hash_string(password + salt)
 
-    user_id = uuid.uuid4()
-
-
-
+    user: User = {
+        "user_id": uuid.uuid4(),
+        "email": email,
+        "hashed_password": hashed_password,
+        "name": name,
+        "creation_time": message_data['timestamp'],
+    }
 
 
 def hash_string(input_string: str) -> str:
