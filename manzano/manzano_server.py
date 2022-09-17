@@ -12,7 +12,7 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
 
         print(f"Received {message[0]} message.")
 
-        if message[0] == "create_user":
+        if message[0] == "create_user_and_get_token":
             message_data = message[1]
 
     except Exception as e:
