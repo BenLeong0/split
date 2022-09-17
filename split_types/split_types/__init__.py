@@ -1,4 +1,4 @@
-from message_types import *
+from . import message_types
 
 
 name = "split_types"
