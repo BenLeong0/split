@@ -1,4 +1,5 @@
 import hashlib
+import uuid
 
 from split_types.message_types import CreateUserMessageData
 
@@ -9,6 +10,9 @@ def create_user(message_data: CreateUserMessageData) -> None:
 
     salt = hash_string(email)
     hashed_password = hash_string(password + salt)
+
+    user_id = uuid.uuid4()
+
 
 
 
