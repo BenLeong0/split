@@ -29,6 +29,10 @@ class CreateUserAndGetTokenMessageData(TypedDict):
 CreateUserAndGetTokenMessage = Tuple[Literal['create_user_and_get_token'], CreateUserAndGetTokenMessageData]
 
 
+class GetTokenResponseMessageData(TypedDict):
+    token: str
+
+
 class GetTokenMessageData(TypedDict):
     email: str
     password: str
