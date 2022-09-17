@@ -3,15 +3,15 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "example_package_YOUR_USERNAME_HERE"
-version = "0.0.1"
+name = "split_types"
+version = "0.0.3"
 authors = [
   { name="Ben Leong", email="author@example.com" },
 ]
-description = "A small example package"
+description = "Types for Split"
 readme = "README.md"
 license = { file="LICENSE" }
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -19,5 +19,4 @@ classifiers = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/pypa/sampleproject"
-"Bug Tracker" = "https://github.com/pypa/sampleproject/issues"
+"Homepage" = "https://github.com/benleong0/split"
