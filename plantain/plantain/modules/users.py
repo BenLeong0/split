@@ -3,6 +3,7 @@ Users module.
 
 Split.
 '''
+import uuid
 
 from db import DatabaseConnection
 
@@ -15,6 +16,6 @@ def store_user(store_user_request):
         # TODO: generate ID
         db.cursor.execute(
             f"INSERT INTO users"
-            f"VALUES ({1, first_name, last_name, email, password})"
+            f"VALUES ({uuid.uuid4(), first_name, last_name, email, password})"
         )
         print(db.cursor.fetchall())
