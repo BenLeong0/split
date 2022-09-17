@@ -1,15 +1,12 @@
 import setuptools
 
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
 setuptools.setup(
     name="split_types",
     version="0.0.1",
     author="Ben Leong",
     author_email="benleong0@gmail.com",
     description="Shared types",
-    long_description=long_description,
+    long_description="Shared types for Split",
     long_description_content_type="text/markdown",
     url="https://github.com/benleong0/split/split_types",
     packages=setuptools.find_packages(),
