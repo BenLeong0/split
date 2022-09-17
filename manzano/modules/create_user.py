@@ -5,7 +5,7 @@ from split_types.message_types import CreateUserMessageData
 from split_types.user import User
 
 
-def create_user(message_data: CreateUserMessageData) -> None:
+def create_user_and_get_token(message_data: CreateUserMessageData) -> None:
     email = message_data['email']
     password = message_data['password']
     name = message_data['name']
@@ -19,8 +19,11 @@ def create_user(message_data: CreateUserMessageData) -> None:
         "hashed_password": hashed_password,
         "name": name,
         "creation_time": message_data['timestamp'],
+        "is_active": True,
     }
+
+    return
 
 
 def hash_string(input_string: str) -> str:
-    return hashlib.md5(input_string).hexdigest()
+    return hashlib.md5(input_string.encode()).hexdigest()
