@@ -7,6 +7,14 @@ class User(TypedDict):
     hashed_password: str
     name: str
     creation_time: str
+    is_active: bool
+
+
+class UserToken(TypedDict):
+    user_id: str
+    email: str
+    creation_time: str
+    expiry_time: str
 
 
 StoreUserMessage = Tuple[Literal['store_user'], User]
