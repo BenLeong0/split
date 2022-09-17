@@ -15,6 +15,8 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
         if message[0] == "create_user_and_get_token":
             message_data = message[1]
 
+        return None
+
     except Exception as e:
         print(e)
 
