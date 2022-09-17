@@ -1,9 +1,10 @@
 from typing import Union
 
+from .transaction import TransactionMessage
 from .user import UserMessage
 
 
-Message = UserMessage
-# Message = Union[
-#     UserMessage,
-# ]
+Message = Union[
+    TransactionMessage,
+    UserMessage,
+]
