@@ -6,9 +6,11 @@ import pika
 
 import modules.users as users
 
+from split_types.message_types import Message
+
 def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
     try:
-        message = json.loads(body)
+        message: Message = json.loads(body)
 
         print(f"Received {message[0]} message.")
 

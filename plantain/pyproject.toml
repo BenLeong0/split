@@ -7,6 +7,7 @@ authors = ["samwinder <sam@myurbanjungle.com>"]
 [tool.poetry.dependencies]
 python = "^3.9"
 pika = "^1.3.0"
+split_types = { git = "https://github.com/benleong/split.git#subdirectory=split_types" }
 
 [tool.poetry.dev-dependencies]
 
