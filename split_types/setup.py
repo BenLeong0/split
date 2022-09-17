@@ -3,7 +3,7 @@ import setuptools
 
 setuptools.setup(
     name="split_types",
-    version="0.0.3",
+    version="0.0.4",
     author="Ben Leong",
     author_email="benleong0@gmail.com",
     description="Shared types",
