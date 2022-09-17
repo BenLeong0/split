@@ -18,10 +18,10 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
             resp = create_user_and_get_token(message[1])
             return json.dumps(("user_token", resp))
 
-        return None
-
     except Exception as e:
         print(e)
+
+    return None
 
 
 def main_loop(args):
