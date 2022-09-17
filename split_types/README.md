@@ -5,7 +5,7 @@ Types used for Split
 
 # Deployment
 
-To build and deploy, increment the version number, then run
+To build and deploy, increment the version number in `pyproject.toml`, then run
 
 ```bash
 pip install --upgrade build twine
