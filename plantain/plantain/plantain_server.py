@@ -1,21 +1,22 @@
 import json
 import sys
+from typing import Optional
 
 import pika
 
 import modules.users as users
 
-def consume_and_respond(_headers: dict, body: str) -> Optional[str]:
+def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
     try:
         message = json.loads(body)
 
         print(f"Received {message[0]} message.")
 
-        if message[0] == "create_user":
-            create_user_request = message[1]
+        if message[0] == "store_user":
+            store_user_request = message[1]
             return json.dumps((
-                "create_user_response",
-                users.create_user(create_user_request)
+                "store_user_response",
+                users.store_user(store_user_request)
             ))
 
     except Exception as e:
@@ -29,7 +30,11 @@ def main_loop(args):
 
     channel.queue_declare(queue="plantain")
 
-    channel.basic_consume(queue="plantain", on_message_callback=consume_and_respond, auto_ack=True)
+    channel.basic_consume(
+        queue="plantain",
+        on_message_callback=consume_and_respond,
+        auto_ack=True
+    )
 
     print(" [*] Waiting for messages. ")
     channel.start_consuming()
