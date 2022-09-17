@@ -13,7 +13,6 @@ def store_user(store_user_request):
     email = store_user_request['email']
     password = store_user_request['password']
     with DatabaseConnection() as db:
-        # TODO: generate ID
         db.cursor.execute(
             f"INSERT INTO users"
             f"VALUES ({uuid.uuid4(), first_name, last_name, email, password})"
