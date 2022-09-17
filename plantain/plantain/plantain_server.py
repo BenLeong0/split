@@ -1,6 +1,8 @@
 import json
 import sys
 
+import pika
+
 import modules.users as users
 
 def consume_and_respond(_headers: dict, body: str) -> Optional[str]:
@@ -22,6 +24,15 @@ def consume_and_respond(_headers: dict, body: str) -> Optional[str]:
 
 def main_loop(args):
     print(args)
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+
+    channel.queue_declare(queue="plantain")
+
+    channel.basic_consume(queue="plantain", on_message_callback=consume_and_respond, auto_ack=True)
+
+    print(" [*] Waiting for messages. ")
+    channel.start_consuming()
 
 
 if __name__ == "__main__":
