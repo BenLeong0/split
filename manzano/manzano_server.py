@@ -27,10 +27,10 @@ def main_loop(args):
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
 
-    channel.queue_declare(queue="plantain")
+    channel.queue_declare(queue="manzano")
 
     channel.basic_consume(
-        queue="plantain",
+        queue="manzano",
         on_message_callback=consume_and_respond,
         auto_ack=True
     )
