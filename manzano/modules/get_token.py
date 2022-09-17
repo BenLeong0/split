@@ -1,5 +1,6 @@
 import arrow
 import jwt
+from typing import Dict, cast
 
 from split_types.user import User, UserToken
 
@@ -15,7 +16,7 @@ def make_user_token(user: User) -> str:
         'creation_time': arrow.utcnow().isoformat(),
         'expiry_time': expiry_timestamp,
     }
-    token = jwt.encode(data, JWT_SECRET, algorithm='HS512')
+    token = jwt.encode(cast(Dict, data), JWT_SECRET, algorithm='HS512')
     return token
 
 
