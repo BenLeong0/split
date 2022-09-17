@@ -12,13 +12,13 @@ class User(TypedDict):
 StoreUserMessage = Tuple[Literal['store_user'], User]
 
 
-class CreateUserMessageData(TypedDict):
+class CreateUserAndGetTokenMessageData(TypedDict):
     email: str
     password: str
     name: str
 
 
-CreateUserMessage = Tuple[Literal['create_user'], CreateUserMessageData]
+CreateUserAndGetTokenMessage = Tuple[Literal['create_user_and_get_token'], CreateUserAndGetTokenMessageData]
 
 
 class GetTokenMessageData(TypedDict):
@@ -30,7 +30,7 @@ GetTokenMessage = Tuple[Literal['get_token'], GetTokenMessageData]
 
 
 UserMessage = Union[
-    CreateUserMessage,
+    CreateUserAndGetTokenMessage,
     StoreUserMessage,
     GetTokenMessage,
 ]
