@@ -14,7 +14,7 @@ def create_user_and_get_token(message_data: CreateUserMessageData) -> None:
     hashed_password = hash_string(password + salt)
 
     user: User = {
-        "user_id": uuid.uuid4(),
+        "user_id": str(uuid.uuid4()),
         "email": email,
         "hashed_password": hashed_password,
         "name": name,
