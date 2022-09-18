@@ -5,6 +5,8 @@ from typing import Optional
 import pika
 from split_types.message_types import Message
 
+from modules.create_user import create_user_and_get_token
+
 
 def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
     try:
@@ -13,7 +15,8 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
         print(f"Received {message[0]} message.")
 
         if message[0] == "create_user_and_get_token":
-            message_data = message[1]
+            resp = create_user_and_get_token(message[1])
+            return resp
 
     except Exception as e:
         print(e)
