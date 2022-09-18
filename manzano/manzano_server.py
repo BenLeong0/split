@@ -16,7 +16,7 @@ def consume_and_respond(_ch, _method, _properties, body) -> Optional[str]:
 
         if message[0] == "create_user_and_get_token":
             resp = create_user_and_get_token(message[1])
-            return resp
+            return json.dumps(("user_token", resp))
 
     except Exception as e:
         print(e)

@@ -3,6 +3,8 @@ import uuid
 
 from split_types.user import CreateUserAndGetTokenMessageData, User
 
+from modules import get_token
+
 
 def create_user_and_get_token(message_data: CreateUserAndGetTokenMessageData) -> None:
     email = message_data['email']
@@ -21,7 +23,9 @@ def create_user_and_get_token(message_data: CreateUserAndGetTokenMessageData) ->
         "is_active": True,
     }
 
-    return
+    return {
+        "token": get_token.make_user_token(user)
+    }
 
 
 def hash_string(input_string: str) -> str:
