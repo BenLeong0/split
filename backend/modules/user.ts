@@ -21,9 +21,7 @@ userRouter.post(
     const { email } = req.body;
 
     createUser(email)
-      .then((user) => {
-        login(user.email);
-      })
+      .then(sendMagicLink)
       .then(() => res.send(generateSuccessfulResponse({})))
       .catch(() =>
         res.status(401).send(generateErrorResponse("unable to create user"))
