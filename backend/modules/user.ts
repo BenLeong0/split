@@ -8,7 +8,6 @@ import {
   generateErrorResponse,
   generateSuccessfulResponse,
 } from "../shared";
-import { LoginRequestBody, CreateUserRequestBody } from "../types";
 
 dotenv.config();
 
@@ -16,6 +15,16 @@ const userRouter: Express = express();
 userRouter.use(express.json());
 
 const prisma = new PrismaClient();
+
+// TYPES
+
+interface CreateUserRequestBody {
+  email: string;
+}
+
+interface LoginRequestBody {
+  email: string;
+}
 
 // ROUTES
 

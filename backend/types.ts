@@ -3,11 +3,3 @@ export interface AccessTokenData {
   iat: string;
   exp: string;
 }
-
-export interface LoginRequestBody {
-  email: string;
-}
-
-export interface CreateUserRequestBody {
-  email: string;
-}
