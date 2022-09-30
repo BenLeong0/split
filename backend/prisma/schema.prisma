@@ -11,13 +11,46 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String?
+  id       String  @id @default(uuid())
+  email    String  @unique
+  name     String?
+  icon     String?
+  isActive Boolean @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  icon      String?
-  isActive  Boolean  @default(false)
+
+  Group           Group[]
+  GroupMembership GroupMembership[]
 
   @@index([id, email])
+}
+
+model Group {
+  id          String  @id @default(uuid())
+  name        String?
+  description String?
+  icon        String?
+  isActive    Boolean @default(false)
+
+  user    User   @relation(fields: [creator], references: [id])
+  creator String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  GroupMembership GroupMembership[]
+
+  @@index([id, creator])
+}
+
+model GroupMembership {
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  group     Group    @relation(fields: [groupId], references: [id])
+  groupId   String
+  role      String?
+  createdAt DateTime @default(now())
+
+  @@id([userId, groupId])
 }
