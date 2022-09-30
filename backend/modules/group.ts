@@ -9,4 +9,8 @@ groupRouter.use(express.json());
 
 const prisma = new PrismaClient();
 
+groupRouter.post("create", (req: Request, res: Response) => {
+  res.send("yo");
+});
+
 export default groupRouter;
