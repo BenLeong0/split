@@ -3,7 +3,11 @@ import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { PrismaClient, User } from "@prisma/client";
 
-import { generateErrorResponse, generateSuccessfulResponse } from "../shared";
+import {
+  authenticate,
+  generateErrorResponse,
+  generateSuccessfulResponse,
+} from "../shared";
 import { LoginRequestBody, CreateUserRequestBody } from "../types";
 
 dotenv.config();
@@ -40,6 +44,26 @@ userRouter.post(
       })
       // ALWAYS send successful response back, since "logging in" happens at magic link level
       .finally(() => res.send(generateSuccessfulResponse({})));
+  }
+);
+
+userRouter.post(
+  "/deactivate",
+  (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
+    authenticate(req)
+      .then((userId) => {
+        prisma.user.update({
+          where: { id: userId },
+          data: { isActive: false },
+        });
+      })
+      .then(() => {
+        res.send(generateSuccessfulResponse("user deactivated"));
+      })
+      .catch((e: Error) => {
+        console.log(e.message);
+        res.send(generateErrorResponse(e.message));
+      });
   }
 );
 
