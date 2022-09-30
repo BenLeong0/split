@@ -1,3 +1,12 @@
+# dependencies
 node_modules
+
+# build
 /dist
+
+# database
+/prisma/db.sqlite
+/prisma/db.sqlite-journal
+
+# local env files
 .env
