@@ -7,9 +7,9 @@
 - [ ] users
   - [x] create db table
   - [ ] magic links
+    - [x] generate magic links
     - [ ] integration with third party service to send emails (mailjet?)
-  - [ ] create user
-  - [ ] login
+  - [x] create user
   - [ ] auth requests
   - [ ] change user details (excl email)
   - [ ] change email
