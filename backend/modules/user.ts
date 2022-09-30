@@ -41,16 +41,12 @@ userRouter.post(
 
 // HELPERS
 
-const getUserByEmail = async (email: string) => {
-  return await prisma.user.findFirstOrThrow({ where: { email } });
-};
-
 const createUser = async (email: string) => {
   return await prisma.user.create({ data: { email } });
 };
 
 const login = async (email: string) => {
-  const user = await getUserByEmail(email);
+  const user = await prisma.user.findFirstOrThrow({ where: { email } });
   await activateUser(user);
   await sendMagicLink(user);
 };
