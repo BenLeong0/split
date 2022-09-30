@@ -45,17 +45,17 @@ const createUser = async (email: string) => {
   return await prisma.user.create({ data: { email } });
 };
 
-const login = async (email: string) => {
-  const user = await prisma.user.findFirstOrThrow({ where: { email } });
-  await activateUser(user);
-  await sendMagicLink(user);
-};
-
 const activateUser = async (user: User) => {
   await prisma.user.update({
     where: { id: user.id },
     data: { isActive: true },
   });
+};
+
+const login = async (email: string) => {
+  const user = await prisma.user.findFirstOrThrow({ where: { email } });
+  await activateUser(user);
+  await sendMagicLink(user);
 };
 
 const generateAccessToken = (userId: string) => {
@@ -68,7 +68,7 @@ const generateAccessToken = (userId: string) => {
 const sendMagicLink = async (user: User): Promise<void> => {
   const accessToken = generateAccessToken(user.id);
   const magicLink = `www.split.com/activation/${accessToken}`;
-  console.log(`Sending magic link "${magicLink}" to ${user.email}`);
+  console.error(`Sending magic link "${magicLink}" to ${user.email}`);
   // TODO: Integrate with email service
 };
 
