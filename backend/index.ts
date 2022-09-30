@@ -1,10 +1,14 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 
+import userRouter from "./modules/user";
+
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT;
+
+app.use("/user", userRouter);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Express + TypeScript Server");
