@@ -4,10 +4,10 @@ export interface AccessTokenData {
   exp: string;
 }
 
-export interface LoginRequestBody {
+export interface CreateUserRequestBody {
   email: string;
 }
 
-export interface CreateUserRequestBody {
+export interface LoginRequestBody {
   email: string;
 }
