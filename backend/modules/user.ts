@@ -34,8 +34,12 @@ userRouter.post(
   (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
     const { email } = req.body;
 
-    // ALWAYS send successful response back, since "logging in" happens at magic link level
-    login(email).finally(() => res.send(generateSuccessfulResponse({})));
+    login(email)
+      .catch((e: Error) => {
+        console.error(e.message);
+      })
+      // ALWAYS send successful response back, since "logging in" happens at magic link level
+      .finally(() => res.send(generateSuccessfulResponse({})));
   }
 );
 
