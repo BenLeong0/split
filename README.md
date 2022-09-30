@@ -10,10 +10,10 @@
     - [x] generate magic links
     - [ ] integration with third party service to send emails (mailjet?)
   - [x] create user
-  - [ ] auth requests
+  - [x] auth requests
   - [ ] change user details (excl email)
   - [ ] change email
-  - [ ] deactivate user
+  - [x] deactivate user
   - [ ] delete user
 - [ ] groups
   - [ ] create db table
