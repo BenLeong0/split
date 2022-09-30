@@ -24,7 +24,7 @@ interface CreateGroupRequestBody {
 // ROUTES
 
 groupRouter.post(
-  "create",
+  "/create",
   (req: Request<{}, {}, CreateGroupRequestBody>, res: Response) => {
     const { name } = req.body;
 
