@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 
 import adminRouter from "./modules/admin";
-import groupRouter from "./modules/admin";
+import groupRouter from "./modules/group";
 import userRouter from "./modules/user";
 
 dotenv.config();
