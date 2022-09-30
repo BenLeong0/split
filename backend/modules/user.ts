@@ -60,7 +60,9 @@ const activateUser = async (userId: string) => {
 };
 
 const generateAccessToken = async (userId: string) => {
-  const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET);
+  const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1d",
+  });
   return token;
 };
 
