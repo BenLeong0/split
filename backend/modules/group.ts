@@ -29,10 +29,10 @@ groupRouter.post(
     const { name } = req.body;
 
     authenticate(req)
-      .then((creatorId) => {
-        createGroup(name, creatorId);
+      .then((creatorId) => createGroup(name, creatorId))
+      .then((groupId) => {
+        res.send(generateSuccessfulResponse({ groupId }));
       })
-      .then((groupId) => res.send(generateSuccessfulResponse({ groupId })))
       .catch(() =>
         res.status(401).send(generateErrorResponse("unable to create group"))
       );
