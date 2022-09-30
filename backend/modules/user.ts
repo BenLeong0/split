@@ -13,12 +13,15 @@ userRouter.use(express.json());
 
 const prisma = new PrismaClient();
 
+// ROUTES
+
 userRouter.post(
   "/create",
   (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
     const { email } = req.body;
 
     createUser(email)
+      .then(sendMagicLink)
       .then(() => res.send(generateSuccessfulResponse({})))
       .catch(() =>
         res.status(401).send(generateErrorResponse("unable to create user"))
@@ -29,46 +32,48 @@ userRouter.post(
 userRouter.post(
   "/login",
   (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
-    const { userId } = req.body;
+    const { email } = req.body;
 
-    activateUser(userId)
-      .then(() =>
-        res.send(
-          generateSuccessfulResponse({ token: generateAccessToken(userId) })
-        )
-      )
-      .catch(() =>
-        res.status(401).send(generateErrorResponse("unable to login"))
-      );
+    login(email)
+      .catch((e: Error) => {
+        console.error(e.message);
+      })
+      // ALWAYS send successful response back, since "logging in" happens at magic link level
+      .finally(() => res.send(generateSuccessfulResponse({})));
   }
 );
 
+// HELPERS
+
 const createUser = async (email: string) => {
-  const user = await prisma.user.create({ data: { email } });
-  sendMagicLink(user);
+  return await prisma.user.create({ data: { email } });
 };
 
-const loginUser = async (userId: string) => {
-  activateUser(userId);
-};
-
-const activateUser = async (userId: string) => {
+const activateUser = async (user: User) => {
   await prisma.user.update({
-    where: { id: userId },
+    where: { id: user.id },
     data: { isActive: true },
   });
 };
 
-const generateAccessToken = async (userId: string) => {
-  const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET);
+const login = async (email: string) => {
+  const user = await prisma.user.findFirstOrThrow({ where: { email } });
+  await activateUser(user);
+  await sendMagicLink(user);
+};
+
+const generateAccessToken = (userId: string) => {
+  const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1d",
+  });
   return token;
 };
 
-const sendMagicLink = (user: User): string => {
-  const magicLink = `www.split.com/activation?userId=${user.id}`;
-  console.log(`Sending magic link "${magicLink}" to ${user.email}`);
+const sendMagicLink = async (user: User): Promise<void> => {
+  const accessToken = generateAccessToken(user.id);
+  const magicLink = `www.split.com/activation/${accessToken}`;
+  console.error(`Sending magic link "${magicLink}" to ${user.email}`);
   // TODO: Integrate with email service
-  return magicLink;
 };
 
 export default userRouter;

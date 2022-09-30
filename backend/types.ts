@@ -1,5 +1,5 @@
 export interface LoginRequestBody {
-  login_token: string;
+  email: string;
 }
 
 export interface CreateUserRequestBody {
