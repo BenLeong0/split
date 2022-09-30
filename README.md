@@ -16,7 +16,7 @@
   - [x] deactivate user
   - [ ] delete user
 - [ ] groups
-  - [ ] create db table
+  - [x] create db table
   - [ ] create group
   - [ ] join group
   - [ ] leave group
