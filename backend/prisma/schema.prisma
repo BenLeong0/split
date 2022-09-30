@@ -31,7 +31,7 @@ model Group {
   name        String
   description String?
   icon        String?
-  isActive    Boolean @default(false)
+  isActive    Boolean @default(true)
 
   user    User   @relation(fields: [creator], references: [id])
   creator String
