@@ -71,7 +71,7 @@ const generateAccessToken = (userId: string) => {
 
 const sendMagicLink = async (user: User): Promise<void> => {
   const accessToken = generateAccessToken(user.id);
-  const magicLink = `www.split.com/activation/${encodeURI(accessToken)}`;
+  const magicLink = `www.split.com/activation/${accessToken}`;
   console.log(`Sending magic link "${magicLink}" to ${user.email}`);
   // TODO: Integrate with email service
 };
