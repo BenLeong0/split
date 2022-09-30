@@ -1,5 +1,5 @@
 export interface LoginRequestBody {
-  login_token: string;
+  loginToken: string;
 }
 
 export interface CreateUserRequestBody {

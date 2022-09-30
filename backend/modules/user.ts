@@ -29,7 +29,7 @@ userRouter.post(
 userRouter.post(
   "/login",
   (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
-    const { userId } = req.body;
+    const { loginToken } = req.body;
 
     activateUser(userId)
       .then(() =>
