@@ -43,7 +43,19 @@ groupRouter.post(
 
 const createGroup = async (name: string, creator: string) => {
   const group = await prisma.group.create({ data: { name, creator } });
-  return group.id;
+
+  const { id: groupId } = group;
+  await createGroupMembership(groupId, creator, "creator");
+
+  return groupId;
+};
+
+const createGroupMembership = async (
+  groupId: string,
+  userId: string,
+  role?: string
+) => {
+  await prisma.groupMembership.create({ data: { groupId, userId, role } });
 };
 
 export default groupRouter;
