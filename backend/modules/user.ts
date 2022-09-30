@@ -51,12 +51,7 @@ userRouter.post(
   "/deactivate",
   (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
     authenticate(req)
-      .then((userId) => {
-        prisma.user.update({
-          where: { id: userId },
-          data: { isActive: false },
-        });
-      })
+      .then(deactivateUser)
       .then(() => {
         res.send(generateSuccessfulResponse("user deactivated"));
       })
@@ -77,6 +72,13 @@ const activateUser = async (user: User) => {
   await prisma.user.update({
     where: { id: user.id },
     data: { isActive: true },
+  });
+};
+
+const deactivateUser = async (userId: string) => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { isActive: false },
   });
 };
 
