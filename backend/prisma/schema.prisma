@@ -11,11 +11,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id
+  id        String   @id @default(uuid())
   email     String   @unique
   name      String?
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   icon      String?
-  isActive  Boolean
+  isActive  Boolean  @default(false)
+
+  @@index([id, email])
 }
