@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 
 import adminRouter from "./modules/admin";
+import groupRouter from "./modules/group";
 import userRouter from "./modules/user";
 
 dotenv.config();
@@ -10,6 +11,7 @@ const app: Express = express();
 const port = process.env.PORT;
 
 app.use("/admin", adminRouter);
+app.use("/group", groupRouter);
 app.use("/user", userRouter);
 
 app.get("/", (req: Request, res: Response) => {
