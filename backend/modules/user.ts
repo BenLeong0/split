@@ -61,7 +61,7 @@ userRouter.post(
   "/deactivate",
   (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
     authenticate(req)
-      .then(deactivateUser)
+      .then(({ userId }) => deactivateUser(userId))
       .then(() => {
         res.send(generateSuccessfulResponse("user deactivated"));
       })
@@ -106,7 +106,7 @@ const generateAccessToken = (userId: string, role: string | null = null) => {
 };
 
 const sendMagicLink = async (user: User): Promise<void> => {
-  const accessToken = generateAccessToken(user.id);
+  const accessToken = generateAccessToken(user.id, user.role);
   const magicLink = `www.split.com/activation/${accessToken}`;
   console.error(`Sending magic link "${magicLink}" to ${user.email}`);
   // TODO: Integrate with email service
