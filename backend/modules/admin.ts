@@ -21,6 +21,19 @@ adminRouter.use((req: Request, res: Response, next) => {
     .catch(() => res.sendStatus(403));
 });
 
+adminRouter.post(
+  "/make_admin",
+  async (req: Request<{}, {}, { userId: string }>, res: Response) => {
+    const { userId } = req.body;
+    const newAdmin = await prisma.user.update({
+      where: { id: userId },
+      data: { role: "admin" },
+    });
+    console.log(newAdmin);
+    res.send(newAdmin);
+  }
+);
+
 adminRouter.get("/all_users", async (req: Request, res: Response) => {
   const allUsers = await prisma.user.findMany();
   console.log(allUsers);
