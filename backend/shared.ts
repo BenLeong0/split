@@ -27,7 +27,7 @@ export const authenticate = async (req: Request) => {
   const user = await prisma.user.findFirst({ where: { id: token.userId } });
 
   if (!user?.isActive) throw Error("user is inactive");
-  return { userId: user, role: user.role };
+  return { userId: user.id, role: user.role };
 };
 
 export const generateSuccessfulResponse = (data: any) => ({
