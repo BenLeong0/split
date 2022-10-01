@@ -2,12 +2,24 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 
+import { authenticate } from "../shared";
+
 dotenv.config();
 
 const adminRouter: Express = express();
 adminRouter.use(express.json());
 
 const prisma = new PrismaClient();
+
+adminRouter.use((req: Request, res: Response, next) => {
+  authenticate(req)
+    .then(({ role }) => {
+      console.log(role);
+      if (role !== "admin") throw Error();
+    })
+    .then(() => next())
+    .catch(() => res.sendStatus(403));
+});
 
 adminRouter.get("/all_users", async (req: Request, res: Response) => {
   const allUsers = await prisma.user.findMany();
