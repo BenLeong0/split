@@ -8,6 +8,10 @@ const prisma = new PrismaClient();
 
 // SHARED
 
+/**
+ * Given an HTTP request, checks the `authorization` header and returns the
+ * `userId` from the access token.
+ */
 export const authenticate = async (req: Request) => {
   const { authorization: authHeader } = req.headers;
 
