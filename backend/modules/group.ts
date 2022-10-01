@@ -25,6 +25,10 @@ interface JoinGroupRequestBody {
   groupId: string;
 }
 
+interface LeaveGroupRequestBody {
+  groupId: string;
+}
+
 // ROUTES
 
 groupRouter.post(
@@ -57,6 +61,20 @@ groupRouter.post(
   }
 );
 
+groupRouter.post(
+  "/leave",
+  (req: Request<{}, {}, LeaveGroupRequestBody>, res: Response) => {
+    const { groupId } = req.body;
+
+    authenticate(req)
+      .then((userId) => deleteGroupMembership(groupId, userId))
+      .then(() => res.send(generateSuccessfulResponse({ groupId })))
+      .catch(() =>
+        res.status(401).send(generateErrorResponse("failed to leave group"))
+      );
+  }
+);
+
 // HELPERS
 
 const createGroup = async (name: string, creator: string) => {
@@ -74,6 +92,12 @@ const createGroupMembership = async (
   role?: string
 ) => {
   await prisma.groupMembership.create({ data: { groupId, userId, role } });
+};
+
+const deleteGroupMembership = async (groupId: string, userId: string) => {
+  await prisma.groupMembership.delete({
+    where: { userId_groupId: { userId, groupId } },
+  });
 };
 
 export default groupRouter;
