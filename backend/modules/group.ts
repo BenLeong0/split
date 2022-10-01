@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request, response, Response } from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 
@@ -75,6 +75,28 @@ groupRouter.post(
   }
 );
 
+groupRouter.get(
+  "/all_members/:groupId",
+  (req: Request<{ groupId: string }>, res: Response) => {
+    const { groupId } = req.params;
+
+    Promise.all([getAllGroupMembers(groupId), authenticate(req)])
+      .then(([groupMemberIds, userId]) => {
+        if (!groupMemberIds.includes(userId)) throw Error("not a member");
+        return groupMemberIds;
+      })
+      .then((groupMemberIds) =>
+        prisma.user.findMany({ where: { id: { in: groupMemberIds } } })
+      )
+      .then((users) => res.send(generateSuccessfulResponse({ users })))
+      .catch(() =>
+        res
+          .status(401)
+          .send(generateErrorResponse("unable to fetch group members"))
+      );
+  }
+);
+
 // HELPERS
 
 const createGroup = async (name: string, creator: string) => {
@@ -98,6 +120,13 @@ const deleteGroupMembership = async (groupId: string, userId: string) => {
   await prisma.groupMembership.delete({
     where: { userId_groupId: { userId, groupId } },
   });
+};
+
+const getAllGroupMembers = async (groupId: string) => {
+  const allMemberships = await prisma.groupMembership.findMany({
+    where: { groupId },
+  });
+  return allMemberships.map((membership) => membership.userId);
 };
 
 export default groupRouter;
