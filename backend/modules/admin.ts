@@ -29,4 +29,13 @@ adminRouter.get("/all_groups", async (req: Request, res: Response) => {
   res.send(allGroups);
 });
 
+adminRouter.get(
+  "/all_group_memberships",
+  async (req: Request, res: Response) => {
+    const allGroupMemberships = await prisma.groupMembership.findMany();
+    console.log(allGroupMemberships);
+    res.send(allGroupMemberships);
+  }
+);
+
 export default adminRouter;
