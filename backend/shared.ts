@@ -22,10 +22,10 @@ export const authenticate = async (req: Request) => {
     accessToken,
     process.env.ACCESS_TOKEN_SECRET
   );
-  const { userId } = decoded as AccessTokenData;
+  const token = decoded as AccessTokenData;
 
-  if (!(await isUserActive(userId))) throw Error("user is inactive");
-  return userId;
+  if (!(await isUserActive(token.userId))) throw Error("user is inactive");
+  return token;
 };
 
 export const generateSuccessfulResponse = (data: any) => ({
