@@ -29,6 +29,14 @@ interface LeaveGroupRequestBody {
   groupId: string;
 }
 
+interface GroupDetailsParams {
+  groupId: string;
+}
+
+interface GroupMembersParams {
+  groupId: string;
+}
+
 // ROUTES
 
 groupRouter.post(
@@ -71,6 +79,35 @@ groupRouter.post(
       .then(() => res.send(generateSuccessfulResponse({ groupId })))
       .catch(() =>
         res.status(401).send(generateErrorResponse("failed to leave group"))
+      );
+  }
+);
+
+groupRouter.get(
+  "/details/:groupId",
+  (req: Request<{ groupId: string }>, res: Response) => {
+    const { groupId } = req.params;
+
+    authenticate(req)
+      .then((userId) => {
+        const group = getGroup(groupId);
+        const groupMemberIds = getAllGroupMembers(groupId);
+        return Promise.all([userId, group, groupMemberIds]);
+      })
+      .then(([userId, group, groupMemberIds]) => {
+        if (!groupMemberIds.includes(userId)) throw Error("not a member");
+        const members = prisma.user.findMany({
+          where: { id: { in: groupMemberIds } },
+        });
+        return Promise.all([group, members]);
+      })
+      .then(([group, members]) =>
+        res.send(generateSuccessfulResponse({ ...group, members }))
+      )
+      .catch(() =>
+        res
+          .status(401)
+          .send(generateErrorResponse("unable to fetch group details"))
       );
   }
 );
@@ -120,6 +157,10 @@ const deleteGroupMembership = async (groupId: string, userId: string) => {
   await prisma.groupMembership.delete({
     where: { userId_groupId: { userId, groupId } },
   });
+};
+
+const getGroup = async (groupId: string) => {
+  return await prisma.group.findUniqueOrThrow({ where: { id: groupId } });
 };
 
 const getAllGroupMembers = async (groupId: string) => {
