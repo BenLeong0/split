@@ -32,6 +32,7 @@
   - [ ] update other transaction details
   - [ ] delete transaction
 - [ ] frontend
+- [ ] admin site
 
 ### Functional
 
