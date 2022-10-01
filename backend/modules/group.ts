@@ -1,4 +1,4 @@
-import express, { Express, Request, response, Response } from "express";
+import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 
@@ -46,7 +46,7 @@ groupRouter.post(
     const { name } = req.body;
 
     authenticate(req)
-      .then((creatorId) => createGroup(name, creatorId))
+      .then(({ userId }) => createGroup(name, userId))
       .then((groupId) => {
         res.send(generateSuccessfulResponse({ groupId }));
       })
@@ -62,7 +62,7 @@ groupRouter.post(
     const { groupId } = req.body;
 
     authenticate(req)
-      .then((userId) => createGroupMembership(groupId, userId))
+      .then(({ userId }) => createGroupMembership(groupId, userId))
       .then(() => res.send(generateSuccessfulResponse({ groupId })))
       .catch(() =>
         res.status(401).send(generateErrorResponse("unable to join group"))
@@ -76,7 +76,7 @@ groupRouter.post(
     const { groupId } = req.body;
 
     authenticate(req)
-      .then((userId) => deleteGroupMembership(groupId, userId))
+      .then(({ userId }) => deleteGroupMembership(groupId, userId))
       .then(() => res.send(generateSuccessfulResponse({ groupId })))
       .catch(() =>
         res.status(401).send(generateErrorResponse("failed to leave group"))
@@ -90,7 +90,7 @@ groupRouter.get(
     const { groupId } = req.params;
 
     authenticate(req)
-      .then((userId) => {
+      .then(({ userId }) => {
         const group = getGroup(groupId);
         const groupMemberIds = getAllGroupMembers(groupId);
         return Promise.all([userId, group, groupMemberIds]);
@@ -117,7 +117,7 @@ groupRouter.get(
     const { groupId } = req.params;
 
     Promise.all([getAllGroupMembers(groupId), authenticate(req)])
-      .then(([groupMemberIds, userId]) => {
+      .then(([groupMemberIds, { userId }]) => {
         if (!groupMemberIds.includes(userId)) throw Error("not a member");
         return groupMemberIds;
       })
