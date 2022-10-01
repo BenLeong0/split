@@ -6,6 +6,7 @@ import {
   authenticate,
   generateErrorResponse,
   generateSuccessfulResponse,
+  getUsers,
 } from "../shared";
 
 dotenv.config();
@@ -96,9 +97,7 @@ groupRouter.get(
       })
       .then(([userId, group, groupMemberIds]) => {
         if (!groupMemberIds.includes(userId)) throw Error("not a member");
-        const members = prisma.user.findMany({
-          where: { id: { in: groupMemberIds } },
-        });
+        const members = getUsers(groupMemberIds);
         return Promise.all([group, members]);
       })
       .then(([group, members]) =>
@@ -122,9 +121,7 @@ groupRouter.get(
         if (!groupMemberIds.includes(userId)) throw Error("not a member");
         return groupMemberIds;
       })
-      .then((groupMemberIds) =>
-        prisma.user.findMany({ where: { id: { in: groupMemberIds } } })
-      )
+      .then(getUsers)
       .then((users) => res.send(generateSuccessfulResponse({ users })))
       .catch(() =>
         res

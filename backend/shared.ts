@@ -38,6 +38,10 @@ export const generateErrorResponse = (errorMsg: string) => ({
   error: errorMsg,
 });
 
+export const getUsers = async (userIds: string[]) => {
+  return prisma.user.findMany({ where: { id: { in: userIds } } });
+};
+
 // HELPERS
 
 const isUserActive = async (userId: string) => {
