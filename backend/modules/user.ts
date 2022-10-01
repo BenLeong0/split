@@ -2,6 +2,8 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { PrismaClient, User } from "@prisma/client";
+import { validateRequest } from "zod-express-middleware";
+import { z } from "zod";
 
 import {
   authenticate,
@@ -18,59 +20,56 @@ const prisma = new PrismaClient();
 
 // TYPES
 
-interface CreateUserRequestBody {
-  email: string;
-  name: string;
-}
+const createUserSchema = z.object({
+  email: z.string().email(),
+  name: z.string(),
+});
 
-interface LoginRequestBody {
-  email: string;
-}
+const loginSchema = z.object({
+  email: z.string().email(),
+});
+
+const deactivateSchema = z.object({
+  email: z.string().email(),
+});
 
 // ROUTES
 
-userRouter.post(
-  "/create",
-  (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
-    const { email, name } = req.body;
+userRouter.post("/create", (req, res) => {
+  createUserSchema
+    .parseAsync(req.body)
+    .then(({ email, name }) => createUser(email, name))
+    .then(sendMagicLink)
+    .then(() => res.send(generateSuccessfulResponse({})))
+    .catch(() =>
+      res.status(401).send(generateErrorResponse("unable to create user"))
+    );
+});
 
-    createUser(email, name)
-      .then(sendMagicLink)
-      .then(() => res.send(generateSuccessfulResponse({})))
-      .catch(() =>
-        res.status(401).send(generateErrorResponse("unable to create user"))
-      );
-  }
-);
+userRouter.post("/login", (req, res) => {
+  loginSchema
+    .parseAsync(req.body)
+    .then(({ email }) => login(email))
+    .catch((e: Error) => {
+      console.error(e.message);
+    })
+    // ALWAYS send successful response back, since "logging in" happens at magic link level
+    .finally(() => res.send(generateSuccessfulResponse({})));
+});
 
-userRouter.post(
-  "/login",
-  (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
-    const { email } = req.body;
-
-    login(email)
-      .catch((e: Error) => {
-        console.error(e.message);
-      })
-      // ALWAYS send successful response back, since "logging in" happens at magic link level
-      .finally(() => res.send(generateSuccessfulResponse({})));
-  }
-);
-
-userRouter.post(
-  "/deactivate",
-  (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
-    authenticate(req)
-      .then(({ userId }) => deactivateUser(userId))
-      .then(() => {
-        res.send(generateSuccessfulResponse("user deactivated"));
-      })
-      .catch((e: Error) => {
-        console.log(e.message);
-        res.send(generateErrorResponse(e.message));
-      });
-  }
-);
+userRouter.post("/deactivate", (req, res) => {
+  deactivateSchema
+    .parseAsync(req.body)
+    .then(() => authenticate(req))
+    .then(({ userId }) => deactivateUser(userId))
+    .then(() => {
+      res.send(generateSuccessfulResponse("user deactivated"));
+    })
+    .catch((e: Error) => {
+      console.log(e.message);
+      res.send(generateErrorResponse(e.message));
+    });
+});
 
 // HELPERS
 
