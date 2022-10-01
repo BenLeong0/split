@@ -21,6 +21,10 @@ interface CreateGroupRequestBody {
   name: string;
 }
 
+interface JoinGroupRequestBody {
+  groupId: string;
+}
+
 // ROUTES
 
 groupRouter.post(
@@ -35,6 +39,20 @@ groupRouter.post(
       })
       .catch(() =>
         res.status(401).send(generateErrorResponse("unable to create group"))
+      );
+  }
+);
+
+groupRouter.post(
+  "/join",
+  (req: Request<{}, {}, JoinGroupRequestBody>, res: Response) => {
+    const { groupId } = req.body;
+
+    authenticate(req)
+      .then((userId) => createGroupMembership(groupId, userId))
+      .then(() => res.send(generateSuccessfulResponse({ groupId })))
+      .catch(() =>
+        res.status(401).send(generateErrorResponse("unable to join group"))
       );
   }
 );

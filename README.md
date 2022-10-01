@@ -17,8 +17,8 @@
   - [ ] delete user
 - [ ] groups
   - [x] create db table
-  - [ ] create group
-  - [ ] join group
+  - [x] create group
+  - [x] join group
   - [ ] leave group
   - [ ] invite existing user to group
   - [ ] generate invite link to group
