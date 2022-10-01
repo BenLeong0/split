@@ -14,10 +14,9 @@ const prisma = new PrismaClient();
 adminRouter.use((req: Request, res: Response, next) => {
   authenticate(req)
     .then(({ role }) => {
-      console.log(role);
-      if (role !== "admin") throw Error();
+      if (role !== "admin") throw new Error("not an admin");
+      next();
     })
-    .then(() => next())
     .catch(() => res.sendStatus(403));
 });
 
