@@ -20,6 +20,7 @@ const prisma = new PrismaClient();
 
 interface CreateUserRequestBody {
   email: string;
+  name: string;
 }
 
 interface LoginRequestBody {
@@ -31,9 +32,9 @@ interface LoginRequestBody {
 userRouter.post(
   "/create",
   (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
-    const { email } = req.body;
+    const { email, name } = req.body;
 
-    createUser(email)
+    createUser(email, name)
       .then(sendMagicLink)
       .then(() => res.send(generateSuccessfulResponse({})))
       .catch(() =>
@@ -73,8 +74,8 @@ userRouter.post(
 
 // HELPERS
 
-const createUser = async (email: string) => {
-  return await prisma.user.create({ data: { email } });
+const createUser = async (email: string, name: string) => {
+  return await prisma.user.create({ data: { email, name } });
 };
 
 const activateUser = async (user: User) => {
