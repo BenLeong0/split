@@ -98,15 +98,15 @@ const login = async (email: string) => {
   await sendMagicLink(user);
 };
 
-const generateAccessToken = (userId: string, role: string | null = null) => {
-  const token = jwt.sign({ userId, role }, process.env.ACCESS_TOKEN_SECRET, {
+const generateAccessToken = (userId: string) => {
+  const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "1d",
   });
   return token;
 };
 
 const sendMagicLink = async (user: User): Promise<void> => {
-  const accessToken = generateAccessToken(user.id, user.role);
+  const accessToken = generateAccessToken(user.id);
   const magicLink = `www.split.com/activation/${accessToken}`;
   console.error(`Sending magic link "${magicLink}" to ${user.email}`);
   // TODO: Integrate with email service
