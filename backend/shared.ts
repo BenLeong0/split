@@ -24,8 +24,10 @@ export const authenticate = async (req: Request) => {
   );
   const token = decoded as AccessTokenData;
 
-  if (!(await isUserActive(token.userId))) throw Error("user is inactive");
-  return token;
+  const user = await prisma.user.findFirst({ where: { id: token.userId } });
+
+  if (!user?.isActive) throw Error("user is inactive");
+  return { userId: user, role: user.role };
 };
 
 export const generateSuccessfulResponse = (data: any) => ({
@@ -40,11 +42,4 @@ export const generateErrorResponse = (errorMsg: string) => ({
 
 export const getUsers = async (userIds: string[]) => {
   return prisma.user.findMany({ where: { id: { in: userIds } } });
-};
-
-// HELPERS
-
-const isUserActive = async (userId: string) => {
-  const user = await prisma.user.findFirst({ where: { id: userId } });
-  return user != null && user.isActive;
 };
