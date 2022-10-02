@@ -42,6 +42,24 @@ export const generateErrorResponse = (errorMsg: string) => ({
   error: errorMsg,
 });
 
+export const getGroupDetails = async (groupId: string) => {
+  const groupDetails = await prisma.group.findUniqueOrThrow({
+    where: { id: groupId },
+    include: {
+      GroupMembership: {
+        select: {
+          user: true,
+        },
+      },
+    },
+  });
+  const { GroupMembership: memberships, ...mainDetails } = groupDetails;
+  return {
+    ...mainDetails,
+    members: memberships.map((membership) => membership.user),
+  };
+};
+
 export const getUsers = async (userIds: string[]) => {
   return prisma.user.findMany({ where: { id: { in: userIds } } });
 };

@@ -6,6 +6,7 @@ import {
   authenticate,
   generateErrorResponse,
   generateSuccessfulResponse,
+  getGroupDetails,
   getUsers,
 } from "../shared";
 
@@ -91,18 +92,15 @@ groupRouter.get(
 
     authenticate(req)
       .then(({ userId }) => {
-        const group = getGroup(groupId);
-        const groupMemberIds = getAllGroupMembers(groupId);
-        return Promise.all([userId, group, groupMemberIds]);
+        const groupDetails = getGroupDetails(groupId);
+        return Promise.all([userId, groupDetails]);
       })
-      .then(([userId, group, groupMemberIds]) => {
-        if (!groupMemberIds.includes(userId)) throw Error("not a member");
-        const members = getUsers(groupMemberIds);
-        return Promise.all([group, members]);
+      .then(([userId, groupDetails]) => {
+        if (!groupDetails.members.map((member) => member.id).includes(userId)) {
+          throw Error("not a member");
+        }
+        res.send(generateSuccessfulResponse(groupDetails));
       })
-      .then(([group, members]) =>
-        res.send(generateSuccessfulResponse({ ...group, members }))
-      )
       .catch(() =>
         res
           .status(401)

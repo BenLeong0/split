@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 
-import { authenticate } from "../shared";
+import { authenticate, getGroupDetails } from "../shared";
 
 dotenv.config();
 
@@ -49,8 +49,11 @@ adminRouter.get("/user/:userId", async (req: Request, res: Response) => {
 
 adminRouter.get("/all_groups", async (req: Request, res: Response) => {
   const allGroups = await prisma.group.findMany();
-  console.log(allGroups);
-  res.send(allGroups);
+  const allGroupDetails = await Promise.all(
+    allGroups.map(async (group) => await getGroupDetails(group.id))
+  );
+  console.log(allGroupDetails);
+  res.send(allGroupDetails);
 });
 
 adminRouter.get(
