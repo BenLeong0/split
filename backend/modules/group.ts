@@ -91,11 +91,8 @@ groupRouter.get(
     const { groupId } = req.params;
 
     authenticate(req)
-      .then(({ userId }) => {
-        const groupDetails = getGroupDetails(groupId);
-        return Promise.all([userId, groupDetails]);
-      })
-      .then(([userId, groupDetails]) => {
+      .then(async ({ userId }) => {
+        const groupDetails = await getGroupDetails(groupId);
         if (!groupDetails.members.map((member) => member.id).includes(userId)) {
           throw Error("not a member");
         }
@@ -105,26 +102,6 @@ groupRouter.get(
         res
           .status(401)
           .send(generateErrorResponse("unable to fetch group details"))
-      );
-  }
-);
-
-groupRouter.get(
-  "/all_members/:groupId",
-  (req: Request<{ groupId: string }>, res: Response) => {
-    const { groupId } = req.params;
-
-    Promise.all([getAllGroupMembers(groupId), authenticate(req)])
-      .then(([groupMemberIds, { userId }]) => {
-        if (!groupMemberIds.includes(userId)) throw Error("not a member");
-        return groupMemberIds;
-      })
-      .then(getUsers)
-      .then((users) => res.send(generateSuccessfulResponse({ users })))
-      .catch(() =>
-        res
-          .status(401)
-          .send(generateErrorResponse("unable to fetch group members"))
       );
   }
 );

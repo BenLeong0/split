@@ -2,7 +2,7 @@ import { Request } from "express";
 import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
-import { AccessTokenData } from "./types";
+import { AccessTokenData, GroupDetails } from "./types";
 
 const prisma = new PrismaClient();
 
@@ -42,8 +42,10 @@ export const generateErrorResponse = (errorMsg: string) => ({
   error: errorMsg,
 });
 
-export const getGroupDetails = async (groupId: string) => {
-  const groupDetails = await prisma.group.findUniqueOrThrow({
+export const getGroupDetails = async (
+  groupId: string
+): Promise<GroupDetails> => {
+  const baseGroupDetails = await prisma.group.findUniqueOrThrow({
     where: { id: groupId },
     include: {
       GroupMembership: {
@@ -53,7 +55,7 @@ export const getGroupDetails = async (groupId: string) => {
       },
     },
   });
-  const { GroupMembership: memberships, ...mainDetails } = groupDetails;
+  const { GroupMembership: memberships, ...mainDetails } = baseGroupDetails;
   return {
     ...mainDetails,
     members: memberships.map((membership) => membership.user),
