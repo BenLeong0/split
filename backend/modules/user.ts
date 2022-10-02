@@ -33,6 +33,7 @@ userRouter.post(
   "/create",
   (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
     const { email, name } = req.body;
+    console.log(`Received create user request (${email})`);
 
     createUser(email, name)
       .then(sendMagicLink)
