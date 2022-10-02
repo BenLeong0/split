@@ -91,9 +91,12 @@ groupRouter.get(
     const { groupId } = req.params;
 
     authenticate(req)
-      .then(async ({ userId }) => {
+      .then(async ({ userId, role }) => {
         const groupDetails = await getGroupDetails(groupId);
-        if (!groupDetails.members.map((member) => member.id).includes(userId)) {
+        if (
+          role !== "admin" &&
+          !groupDetails.members.map((member) => member.id).includes(userId)
+        ) {
           throw Error("not a member");
         }
         res.send(generateSuccessfulResponse(groupDetails));
