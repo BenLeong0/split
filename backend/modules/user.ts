@@ -77,6 +77,7 @@ userRouter.post(
 
 const createUser = async (email: string, name: string) => {
   console.log(`Creating user with email ${email}`);
+  console.log(`database irl: ${process.env.DATABASE_URL}`);
   const user = await prisma.user.create({ data: { email, name } });
   console.log(`User ${user.id} created`);
   return user;
