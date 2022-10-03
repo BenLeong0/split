@@ -1,9 +1,9 @@
 import { Request } from "express";
 import jwt from "jsonwebtoken";
 
-import { AccessTokenData, GroupDetails } from "./types";
+import { AccessTokenData, GroupDetails } from "../types";
 
-import prisma from "./shared/prisma-client";
+import prisma from "./prisma-client";
 
 // SHARED
 

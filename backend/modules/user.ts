@@ -9,7 +9,7 @@ import {
   authenticate,
   generateErrorResponse,
   generateSuccessfulResponse,
-} from "../shared";
+} from "../shared/utils";
 
 dotenv.config();
 

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 
 import prisma from "../shared/prisma-client";
 
-import { authenticate, getGroupDetails } from "../shared";
+import { authenticate, getGroupDetails } from "../shared/utils";
 
 dotenv.config();
 

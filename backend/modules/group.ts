@@ -9,7 +9,7 @@ import {
   generateSuccessfulResponse,
   getGroupDetails,
   getUsers,
-} from "../shared";
+} from "../shared/utils";
 
 dotenv.config();
 
