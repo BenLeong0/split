@@ -1,15 +1,20 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
 
-import { authenticate, getGroupDetails } from "../shared";
+import prisma from "../shared/prisma-client";
+
+import {
+  authenticate,
+  generateErrorResponse,
+  generateSuccessfulResponse,
+  getGroupDetails,
+} from "../shared/utils";
+import { CreateUserRequestBody, createUser, generateAccessToken } from "./user";
 
 dotenv.config();
 
 const adminRouter: Express = express();
 adminRouter.use(express.json());
-
-const prisma = new PrismaClient();
 
 adminRouter.use((req: Request, res: Response, next) => {
   authenticate(req)
@@ -30,6 +35,19 @@ adminRouter.post(
     });
     console.log(newAdmin);
     res.send(newAdmin);
+  }
+);
+
+adminRouter.post(
+  "/create_user",
+  async (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
+    const { email, name } = req.body;
+    createUser(email, name)
+      .then((user) => generateAccessToken(user.id))
+      .then((accessToken) => res.send(generateSuccessfulResponse(accessToken)))
+      .catch((e: Error) =>
+        res.status(400).send(generateErrorResponse(e.message))
+      );
   }
 );
 

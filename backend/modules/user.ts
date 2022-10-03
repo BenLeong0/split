@@ -1,24 +1,24 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
+
+import prisma from "../shared/prisma-client";
 
 import {
   authenticate,
   generateErrorResponse,
   generateSuccessfulResponse,
-} from "../shared";
+} from "../shared/utils";
 
 dotenv.config();
 
 const userRouter: Express = express();
 userRouter.use(express.json());
 
-const prisma = new PrismaClient();
-
 // TYPES
 
-interface CreateUserRequestBody {
+export interface CreateUserRequestBody {
   email: string;
   name: string;
 }
@@ -75,7 +75,7 @@ userRouter.post(
 
 // HELPERS
 
-const createUser = async (email: string, name: string) => {
+export const createUser = async (email: string, name: string) => {
   console.log(`Creating user with email ${email}`);
   console.log(`database irl: ${process.env.DATABASE_URL}`);
   const user = await prisma.user.create({ data: { email, name } });
@@ -103,7 +103,7 @@ const login = async (email: string) => {
   await sendMagicLink(user);
 };
 
-const generateAccessToken = (userId: string) => {
+export const generateAccessToken = (userId: string) => {
   const token = jwt.sign({ userId }, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "1d",
   });

@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+
+import prisma from "../shared/prisma-client";
 
 import {
   authenticate,
@@ -8,14 +9,12 @@ import {
   generateSuccessfulResponse,
   getGroupDetails,
   getUsers,
-} from "../shared";
+} from "../shared/utils";
 
 dotenv.config();
 
 const groupRouter: Express = express();
 groupRouter.use(express.json());
-
-const prisma = new PrismaClient();
 
 // TYPES
 

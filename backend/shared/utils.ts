@@ -1,10 +1,9 @@
 import { Request } from "express";
-import { PrismaClient } from "@prisma/client";
 import jwt from "jsonwebtoken";
 
-import { AccessTokenData, GroupDetails } from "./types";
+import { AccessTokenData, GroupDetails } from "../types";
 
-const prisma = new PrismaClient();
+import prisma from "./prisma-client";
 
 // SHARED
 
