@@ -1,7 +1,9 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-import { PrismaClient, User } from "@prisma/client";
+import { User } from "@prisma/client";
+
+import prisma from "../shared/prisma-client";
 
 import {
   authenticate,
@@ -13,8 +15,6 @@ dotenv.config();
 
 const userRouter: Express = express();
 userRouter.use(express.json());
-
-const prisma = new PrismaClient();
 
 // TYPES
 

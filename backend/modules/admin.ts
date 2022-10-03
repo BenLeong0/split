@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
-import { PrismaClient } from "@prisma/client";
+
+import prisma from "../shared/prisma-client";
 
 import { authenticate, getGroupDetails } from "../shared";
 
@@ -8,8 +9,6 @@ dotenv.config();
 
 const adminRouter: Express = express();
 adminRouter.use(express.json());
-
-const prisma = new PrismaClient();
 
 adminRouter.use((req: Request, res: Response, next) => {
   authenticate(req)
