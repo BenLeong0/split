@@ -1,15 +1,17 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request } from "express";
 import dotenv from "dotenv";
 
 import prisma from "../shared/prisma-client";
 
 import {
+  SplitResponse,
   authenticate,
   generateErrorResponse,
   generateSuccessfulResponse,
   getGroupDetails,
   getUsers,
 } from "../shared/utils";
+import { GroupDetails } from "../types";
 
 dotenv.config();
 
@@ -42,7 +44,10 @@ interface GroupMembersParams {
 
 groupRouter.post(
   "/create",
-  (req: Request<{}, {}, CreateGroupRequestBody>, res: Response) => {
+  (
+    req: Request<{}, {}, CreateGroupRequestBody>,
+    res: SplitResponse<{ groupId: string }>
+  ) => {
     const { name } = req.body;
 
     authenticate(req)
@@ -58,7 +63,10 @@ groupRouter.post(
 
 groupRouter.post(
   "/join",
-  (req: Request<{}, {}, JoinGroupRequestBody>, res: Response) => {
+  (
+    req: Request<{}, {}, JoinGroupRequestBody>,
+    res: SplitResponse<{ groupId: string }>
+  ) => {
     const { groupId } = req.body;
 
     authenticate(req)
@@ -72,7 +80,10 @@ groupRouter.post(
 
 groupRouter.post(
   "/leave",
-  (req: Request<{}, {}, LeaveGroupRequestBody>, res: Response) => {
+  (
+    req: Request<{}, {}, LeaveGroupRequestBody>,
+    res: SplitResponse<{ groupId: string }>
+  ) => {
     const { groupId } = req.body;
 
     authenticate(req)
@@ -86,7 +97,7 @@ groupRouter.post(
 
 groupRouter.get(
   "/details/:groupId",
-  (req: Request<{ groupId: string }>, res: Response) => {
+  (req: Request<{ groupId: string }>, res: SplitResponse<GroupDetails>) => {
     const { groupId } = req.params;
 
     authenticate(req)

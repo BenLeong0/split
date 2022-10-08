@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, Request } from "express";
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { User } from "@prisma/client";
