@@ -1,4 +1,4 @@
-import { Request } from "express";
+import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 
 import { AccessTokenData, GroupDetails } from "../types";
@@ -31,15 +31,35 @@ export const authenticate = async (req: Request) => {
   return { userId: user.id, role: user.role };
 };
 
-export const generateSuccessfulResponse = (data: any) => ({
-  status: "success",
-  data,
-});
+export function generateSuccessfulResponse<T>(
+  data: T
+): SuccessfulResponseBody<T> {
+  return {
+    status: "success",
+    data,
+  };
+}
 
-export const generateErrorResponse = (errorMsg: string) => ({
+export interface SuccessfulResponseBody<T> {
+  status: "success";
+  data: T;
+}
+
+export const generateErrorResponse = (
+  errorMsg: string
+): FailedResponseBody => ({
   status: "error",
   error: errorMsg,
 });
+
+export interface FailedResponseBody {
+  status: "error";
+  error: string;
+}
+
+export type SplitResponse<T = any> = Response<
+  SuccessfulResponseBody<T> | FailedResponseBody
+>;
 
 export const getGroupDetails = async (
   groupId: string
