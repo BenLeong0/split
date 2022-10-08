@@ -6,6 +6,7 @@ import { User } from "@prisma/client";
 import prisma from "../shared/prisma-client";
 
 import {
+  SplitResponse,
   authenticate,
   generateErrorResponse,
   generateSuccessfulResponse,
@@ -31,7 +32,7 @@ interface LoginRequestBody {
 
 userRouter.post(
   "/create",
-  (req: Request<{}, {}, CreateUserRequestBody>, res: Response) => {
+  (req: Request<{}, {}, CreateUserRequestBody>, res: SplitResponse) => {
     const { email, name } = req.body;
     console.log(`Received create user request (${email})`);
 
@@ -46,7 +47,7 @@ userRouter.post(
 
 userRouter.post(
   "/login",
-  (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
+  (req: Request<{}, {}, LoginRequestBody>, res: SplitResponse) => {
     const { email } = req.body;
 
     login(email)
@@ -60,7 +61,7 @@ userRouter.post(
 
 userRouter.post(
   "/deactivate",
-  (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
+  (req: Request<{}, {}, LoginRequestBody>, res: SplitResponse<string>) => {
     authenticate(req)
       .then(({ userId }) => deactivateUser(userId))
       .then(() => {
